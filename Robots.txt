@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://https://karatayfenlisesibilisimkulubu.netlify.app/sitemap.xml
