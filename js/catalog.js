@@ -2,12 +2,9 @@ const catalog = document.getElementById('catalog');
 const searchInput = document.getElementById('searchInput');
 let catalogData = [];
 
-fetch(new URL('catalog.json', location.href))
+fetch('catalog.json')
   .then(res => {
     console.log('Fetch response:', res);
-    if (!res.ok) {
-      throw new Error(`fetch failed: ${res.status} ${res.statusText}`);
-    }
     return res.json();
   })
   .then(data => {
@@ -20,19 +17,6 @@ fetch(new URL('catalog.json', location.href))
   })
   .catch(err => {
     console.error('Catalog yüklenemedi:', err);
-    // Görünür hata bildirimi
-    try {
-      const existing = document.getElementById('load-error-banner');
-      if (!existing) {
-        const banner = document.createElement('div');
-        banner.id = 'load-error-banner';
-        banner.style.cssText = 'position:fixed;left:12px;right:12px;top:12px;padding:12px;border-radius:8px;background:#ff5252;color:#fff;font-weight:700;z-index:9999;box-shadow:0 6px 18px rgba(0,0,0,0.4);';
-        banner.textContent = 'Veriler yüklenemedi. Konsolu (DevTools) kontrol edin.';
-        document.body.appendChild(banner);
-      }
-    } catch (e) {
-      console.error('Banner gösterilemedi', e);
-    }
   });
 
 function renderCatalog(data) {
@@ -46,18 +30,8 @@ function renderCatalog(data) {
     
     // Resim
     const img = document.createElement('img');
-    // Güvenli resim URL'si (deploy path'ine göre doğru çözümleme)
-    try {
-      img.src = new URL(item.image, location.href).href;
-    } catch (e) {
-      img.src = item.image;
-    }
+    img.src = item.image;
     img.alt = item.title;
-    img.onerror = function(ev) {
-      console.error('Image load failed for', img.src, ev);
-      img.style.filter = 'grayscale(100%)';
-      img.title = 'Resim yüklenemedi';
-    };
     
     // İçerik
     const content = document.createElement('div');
